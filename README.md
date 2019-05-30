@@ -36,8 +36,6 @@ VGGFace was chosen because it offered a simple but deep architecture. An advanta
 ### ResNet50
 A deeper, more complex model was desired to see if the model would be able to learn and differentiate more specific features such as the inside of the eyes or the curves in a person's philtrum. Thinking that a network can decide whether or not a facial feature is important through residual blocks, ResNet50 was chosen.
 
-(Number of parameters is less than VGGFace which means it takes less space but also performs faster)
-
 (```Insert Hyperparameters Used```) <br>
 (*train/validation loss graph*) (*train/validation accuracy graph*)<br>
 (--> slight observation comment <--)<br>
