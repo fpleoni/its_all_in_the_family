@@ -18,10 +18,10 @@ The basic idea of Siamese CNNs is inputting two images on seperate CNNs which ha
 Siamese CNNs is still a field that is relatively new. There are no publicly available pretrained Siamese CNNs. As such we borrow the methods used in research papers about this same topic and rely on transfer learning to compensate for our lack of images for each class. 
 
 #### Baseline 
-(--> if you have a baseline architecture you can put <--)
-(```Insert Hyperparameters Used```)
-(*train/validation loss graph*) (*train/validation accuracy graph*)
-(--> slight observation comment <--)
+(--> if you have a baseline architecture you can put <--)<br>
+(```Insert Hyperparameters Used```) <br>
+(*train/validation loss graph*) (*train/validation accuracy graph*)<br>
+(--> slight observation comment <--)<br>
 
 ## Pretrained Models
 Three different pretrained models were used to assisst in modelling
@@ -29,26 +29,25 @@ Three different pretrained models were used to assisst in modelling
 #### VGGFace
 VGGFace was chosen because it offered a simple but deep architecture. An advantage to this model was its simplicity and that it avoided the vanishing gradient problem because of its lower number of layers.
 
-(```Insert Hyperparameters Used```)
-(*train/validation loss graph*) (*train/validation accuracy graph*)
-(--> slight observation comment <--)
+(```Insert Hyperparameters Used```) <br>
+(*train/validation loss graph*) (*train/validation accuracy graph*)<br>
+(--> slight observation comment <--)<br>
 
 #### ResNet50
 A deeper, more complex model was desired to see if the model would be able to learn and differentiate more specific features such as the inside of the eyes or the curves in a person's philtrum. Thinking that a network can decide whether or not a facial feature is important through residual blocks, ResNet50 was chosen.
 
 (Number of parameters is less than VGGFace which means it takes less space but also performs faster)
 
-(```Insert Hyperparameters Used```)
-(*train/validation loss graph*) (*train/validation accuracy graph*)
-(--> slight observation comment <--)
+(```Insert Hyperparameters Used```) <br>
+(*train/validation loss graph*) (*train/validation accuracy graph*)<br>
+(--> slight observation comment <--)<br>
 
 #### FaceNet
 Based on a research paper called "(Insert research paper name)"(insert research paper link), FaceNet is used because of its high performance.
 
-(IMAGES)
-(```Insert Hyperparameters Used```)
-(*train/validation loss graph*) (*train/validation accuracy graph*)
-(--> slight observation comment <--)
+(```Insert Hyperparameters Used```) <br>
+(*train/validation loss graph*) (*train/validation accuracy graph*)<br>
+(--> slight observation comment <--)<br>
 
 ## Further Steps
 - As we had many models, with many layers, hyperparameter tuning is an area that could be greatly improved. 
