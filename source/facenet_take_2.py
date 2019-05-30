@@ -1,5 +1,8 @@
+
 # coding: utf-8
-# In[9]:
+
+# In[1]:
+
 
 # Import libraries
 from collections import defaultdict
@@ -11,11 +14,12 @@ import tensorflow as tf
 from tensorflow.keras import layers
 from tensorflow.keras import preprocessing
 from tensorflow.keras import models
-from tensorflow.keras import callbacks
 from tensorflow.keras import optimizers
 from tensorflow.keras import backend as K
+from tensorflow.keras import regularizers
+from tensorflow.math import sqrt, square, reduce_sum
 from random import choice, sample
-from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
+from keras.applications.vgg16 import preprocess_input
 from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
 import matplotlib
 matplotlib.use('agg')
@@ -61,7 +65,7 @@ val = [x for x in relationships if validation_path in x[0]]
 
 
 def read_img(path):
-    img = preprocessing.image.load_img(path, target_size=(224, 224))
+    img = preprocessing.image.load_img(path, target_size=(160, 160))
     img = preprocessing.image.img_to_array(img)
     img = preprocess_input(img)
     return img
@@ -93,7 +97,7 @@ def gen(list_tuples, person_to_images_map, batch_size=16):
         yield [X1, X2], labels
 
 
-# In[ ]:
+# In[4]:
 
 
 def contrastive_loss(y_true, y_pred):
@@ -104,21 +108,43 @@ def contrastive_loss(y_true, y_pred):
     return K.mean(y_true * K.square(y_pred) + (1 - y_pred) * K.square(K.maximum(margin - y_pred, 0)))
 
 
-# In[4]:
+# In[ ]:
+
+
+# Import FaceNet model and FaceNet weights
+facenet_model = models.load_model("../facenet/facenet_keras.h5")
+facenet_model.load_weights("../facenet/facenet_keras_weights.h5")
+ 
+facenet_model.trainable = True
+
+set_trainable = False
+for layer in facenet_model.layers:
+    if layer.name in ["Mixed_7a_Branch_2_Conv2d_0a_1x1", "Block8_1_Branch_1_Conv2d_0a_1x1"]:
+        set_trainable = True
+    if set_trainable:
+        layer.trainable = True
+    else:
+        layer.trainable = False
+
+# layers = [(layer, layer.name, layer.trainable) for layer in facenet_model.layers]
+# pd.set_option("display.max_rows", 500)
+# pd.DataFrame(layers, columns=["Layer Type", "Layer Name", "Layer Trainable"]) 
+
+
+# In[ ]:
 
 
 # Define Model Architecture 
 def siamese_model():
-    left_image = layers.Input(shape = (224, 224, 3))
-    right_image = layers.Input(shape = (224, 224, 3))
-    
-    resnet_model = ResNet50(weights = "imagenet", include_top = True)
-    
-    for layer in resnet_model.layers[:-3]:
-	    layer.trainable = True
+    left_image = layers.Input(shape = (160, 160, 3))
+    right_image = layers.Input(shape = (160, 160, 3))
 
-    x1 = resnet_model(left_image)
-    x2 = resnet_model(right_image)
+    model = models.Sequential()
+    model.add(facenet_model)
+    model.add(layers.Dense(128, activation = "tanh"))
+    
+    x1 = model(left_image)
+    x2 = model(right_image)
     
     L2_normalized_layer_1 = layers.Lambda(lambda x: K.l2_normalize(x, axis = 1))
     X1_normal = L2_normalized_layer_1(x1)
@@ -126,44 +152,48 @@ def siamese_model():
 
     L1_layer = layers.Lambda(lambda tensors: K.abs(tensors[0] - tensors[1]))
     L1_distance = L1_layer([X1_normal, X2_normal])
-    
+
     prediction = layers.Dense(1, activation = "sigmoid")(L1_distance)
     
     siamese_net = models.Model(inputs = [left_image, right_image], outputs = prediction)
 
-    siamese_net.compile(loss = contrastive_loss, metrics = ["acc"], optimizer = optimizers.Adam(0.00001))
+    siamese_net.compile(loss = contrastive_loss, metrics = ["acc"], optimizer = optimizers.Adam(0.0001))
     
     return siamese_net
 
 
-# In[7]:
+# In[1]:
 
 
 early_stop = EarlyStopping(monitor = "val_acc", mode = "max", patience = 20)
 
-model_checkpoint = ModelCheckpoint("best_kinship_resnet_model_.h5", monitor = "val_acc", 
+model_checkpoint = ModelCheckpoint("best_kinship_facenet_model_2.h5", monitor = "val_acc", 
                                              mode = "max", save_best_only = True)
 
 reduce_lr_on_plateau = ReduceLROnPlateau(monitor = "val_acc", mode = "max", patience = 10, factor = 0.1)
 
 
-# In[10]:
+# In[9]:
 
 
 kinship_model = siamese_model()
-history = kinship_model.fit_generator(gen(train, train_person_to_images_map, batch_size = 20),
-                    validation_data = gen(val, val_person_to_images_map, batch_size = 20), epochs = 100, verbose = 2,
-                steps_per_epoch = 200, validation_steps = 100, callbacks = [early_stop, model_checkpoint, reduce_lr_on_plateau])
+history = kinship_model.fit_generator(gen(train, train_person_to_images_map, batch_size = 100),
+                    validation_data = gen(val, val_person_to_images_map, batch_size = 100), epochs = 200, verbose = 2,
+                steps_per_epoch = 200, validation_steps = 100, 
+                            callbacks = [early_stop, model_checkpoint, reduce_lr_on_plateau])
 
 
 # In[ ]:
 
 
 kinship_model_json = kinship_model.to_json()
-with open("kinship_model_resnet.json", "w") as json_file:
+with open("kinship_model_facenet_2.json", "w") as json_file:
     json_file.write(kinship_model_json)
     
-kinship_model.save_weights("kinship_model_weights_resnet.h5")
+kinship_model.save_weights("kinship_model_weights_facenet_2.h5")
+
+
+# In[ ]:
 
 
 # list all data in history
@@ -176,16 +206,20 @@ plt.ylabel("accuracy")
 plt.xlabel("epoch")
 plt.legend(["train", "validation"], loc = "upper left")
 plt.show()
-plt.savefig("resnet_acc.png")
+plt.savefig("facenet_2_acc.png")
 # summarize history for loss
 plt.plot(history.history["loss"], "aquamarine")
 plt.plot(history.history["val_loss"], color = "magenta")
-plt.title("Model loss")
+plt.title("model loss")
 plt.ylabel("loss")
 plt.xlabel("epoch")
 plt.legend(["train", "validation"], loc = "upper left")
 plt.show()
-plt.savefig("resnet_loss.png")
+plt.savefig("facenet_2_loss.png")
+
+
+# In[ ]:
+
 
 test_path = "../data/test/"
 
@@ -226,4 +260,5 @@ for batch in gen_2(submission_df.img_pair.values):
     predictions += pred
     
 submission_df["predicted_relationship"] = predictions
-submission_df.to_csv("resnet_predictions.csv", index = False)
+submission_df.to_csv("facenet_2_predictions.csv", index = False)
+
