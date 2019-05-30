@@ -142,9 +142,9 @@ def siamese_model():
     X1_normal = L2_normalized_layer_1(x1)
     X2_normal = L2_normalized_layer_1(x2)
     
-    Eu_distance = tf.convert_to_tensor(euclidean_distance(X1_normal, X2_normal)
+    Eu_distance = tf.convert_to_tensor(euclidean_distance(X1_normal, X2_normal))
     
-    prediction = sigmoid(Eu_distance)
+    prediction = layers.Lambda(sigmoid(Eu_distance))
     
     siamese_net = models.Model(inputs = [left_image, right_image], outputs = prediction)
 
