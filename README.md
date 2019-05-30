@@ -1,7 +1,7 @@
 # its_all_in_the_family
 
 ## Motivaiton
-Identifying images through a picture is a very interesting topic. It becomes even more interesting by going one step further and differentiating between images. This project focuses on identifying unique features in images of faces and classfying given images as being blood related or not. This idea brings forth much real world implications and neural network theory advancements.
+Identifying images through a picture is a very interesting topic. It becomes even more interesting by going one step further and differentiating between images. This project focuses on identifying unique features in images of faces and classfying these images as being blood related or not. This idea brings forth much real world implications and neural network theory advancements.
 
 ## Faces Dataset
 The training and test images can be found through the "data/" path.
@@ -15,6 +15,53 @@ The method that is employed to classify the faces is the method of using Convolu
 
 The basic idea of Siamese CNNs is inputting two images on seperate CNNs which have the same architecture. These two sepearte CNNs output a feature vector corresponding to the input images. Some distance metric such as cosine distance, euclidean distance, or absolute distance is used between the two feature vectors which is then sent through a fully connected layer with a sigmoid activation function to output a score between 0 and 1. This represents the probably that the images are similar, with values closer to 1 labeled as more similar. 
 
+Siamese CNNs is still a field that is relatively new. There are no publicly available pretrained Siamese CNNs. As such we borrow the methods used in research papers about this same topic and rely on transfer learning to compensate for our lack of images for each class. 
+
+#### Baseline 
+(--> if you have a baseline architecture you can put <--)
+(```Insert Hyperparameters Used```)
+(*train/validation loss graph*) (*train/validation accuracy graph*)
+(--> slight observation comment <--)
+
+## Pretrained Models
+Three different pretrained models were used to assisst in modelling
+
+#### VGGFace
+VGGFace was chosen because it offered a simple but deep architecture. An advantage to this model was its simplicity and that it avoided the vanishing gradient problem because of its lower number of layers.
+
+(```Insert Hyperparameters Used```)
+(*train/validation loss graph*) (*train/validation accuracy graph*)
+(--> slight observation comment <--)
+
+#### ResNet50
+A deeper, more complex model was desired to see if the model would be able to learn and differentiate more specific features such as the inside of the eyes or the curves in a person's philtrum. Thinking that a network can decide whether or not a facial feature is important through residual blocks, ResNet50 was chosen.
+
+(Number of parameters is less than VGGFace which means it takes less space but also performs faster)
+
+(```Insert Hyperparameters Used```)
+(*train/validation loss graph*) (*train/validation accuracy graph*)
+(--> slight observation comment <--)
+
+#### FaceNet
+Based on a research paper called "(Insert research paper name)"(insert research paper link), FaceNet is used because of its high performance.
+
+(IMAGES)
+(```Insert Hyperparameters Used```)
+(*train/validation loss graph*) (*train/validation accuracy graph*)
+(--> slight observation comment <--)
+
+## Further Steps
+- As we had many models, with many layers, hyperparameter tuning is an area that could be greatly improved. 
+- Many of the research papers that were studied before attempting this project first used a method of sectioning the images of the face into multiple sections before sending them through the network i.e. top right, top left, bottom right, bottom left. A way to improve the models would be to perform this action beforehand.
+
+
+These sections are then used in a similar fashion as the 
+
+
+
+VGGFace - (around 50% accuracy)
+ResNet50 - (around 50% accuracy)
+FaceNet - (performed the best; around 7% better compared to other 2 -> 57%) 
 
 
 
