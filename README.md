@@ -6,7 +6,7 @@ Identifying images through a picture is a very interesting topic. It becomes eve
 ## Faces Dataset
 The training and test images can be found through the "data/" path.
 
-The images were obtained from a publicly open dataset called Faces in the Wild (http://vis-www.cs.umass.edu/lfw/). The dataset consists of 1000 different families with 100,000 individual images of faces that have already been resized and face centered with each other.
+The images were obtained from a publicly open dataset called Faces in the Wild (http://vis-www.cs.umass.edu/lfw/). The dataset consists of 1000 different families with 18,660 individual images of faces that have already been resized and face centered with each other.
 
 One caveat to this dataset is that every person did not have an equal amount of images. Some had 1 while others had 50 or more. Similarly, some families had more images than others e.g. family F0601 (The Royal Family) with 776 photos which is 6.27% of all the photos, comparitively to the average which was around 26 photos. This imbalance however is not large enough that it would impose a bias within the training set.
 
@@ -58,7 +58,6 @@ Based on a research paper called "(Insert research paper name)"(insert research 
 VGGFace - (around 50% accuracy)
 ResNet50 - (around 50% accuracy)
 FaceNet - (performed the best; around 7% better compared to other 2 -> 57%) 
-
 
 
 
