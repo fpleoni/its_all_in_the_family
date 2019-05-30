@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
 # In[1]:
@@ -20,7 +20,7 @@ from tensorflow.keras import regularizers
 from tensorflow.math import sqrt, square, reduce_sum, sigmoid
 from random import choice, sample
 from keras.applications.vgg16 import preprocess_input
-from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+from keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
 
 
 # In[2]:
@@ -134,7 +134,6 @@ def siamese_model():
     model = models.Sequential()
     model.add(facenet_model)
     model.add(layers.Dense(128, activation = "relu"))
-    facenet_model.trainable = False
     
     x1 = model(left_image)
     x2 = model(right_image)
@@ -142,15 +141,14 @@ def siamese_model():
     L2_normalized_layer_1 = layers.Lambda(lambda x: K.l2_normalize(x, axis = 1))
     X1_normal = L2_normalized_layer_1(x1)
     X2_normal = L2_normalized_layer_1(x2)
-
-    L1_layer = layers.Lambda(lambda tensors: K.abs(tensors[0] - tensors[1]))
-    L1_distance = L1_layer([X1_normal, X2_normal])
     
-    prediction = layers.Dense(1, activation = "sigmoid")(L1_distance)
+    Eu_distance = tf.convert_to_tensor(euclidean_distance(X1_normal, X2_normal)
+    
+    prediction = sigmoid(Eu_distance)
     
     siamese_net = models.Model(inputs = [left_image, right_image], outputs = prediction)
 
-    siamese_net.compile(loss = contrastive_loss, metrics = ["acc", L1_distance], optimizer = optimizers.Adam(0.0001))
+    siamese_net.compile(loss = contrastive_loss, metrics = ["acc"], optimizer = optimizers.Adam(0.0001))
     
     return siamese_net
 
@@ -158,12 +156,12 @@ def siamese_model():
 # In[9]:
 
 
-# tensorboard = TensorBoard(log_dir = "./logs_facenet", batch_size = 100, write_images = True,
-#                                    write_grads = True, write_graph = False)
+tensorboard = TensorBoard(log_dir = "./logs_facenet", batch_size = 100, write_images = True,
+                                   write_grads = True, write_graph = False)
 
 early_stop = EarlyStopping(monitor = "val_acc", mode = "max", patience = 20)
 
-model_checkpoint = ModelCheckpoint("best_kinship_model_facenet.h5", monitor = "val_acc", 
+model_checkpoint = ModelCheckpoint("best_kinship_model_2.h5", monitor = "val_acc", 
                                              mode = "max", save_best_only = True)
 
 reduce_lr_on_plateau = ReduceLROnPlateau(monitor = "val_acc", mode = "max", patience = 10, factor = 0.1)
@@ -176,7 +174,7 @@ kinship_model = siamese_model()
 kinship_model.fit_generator(gen(train, train_person_to_images_map, batch_size = 100),
                     validation_data = gen(val, val_person_to_images_map, batch_size = 100), epochs = 200, verbose = 2,
                 steps_per_epoch = 200, validation_steps = 100, 
-                            callbacks = [early_stop, model_checkpoint, reduce_lr_on_plateau])
+                            callbacks = [tensorboard, early_stop, model_checkpoint, reduce_lr_on_plateau])
 
 
 # In[ ]:
@@ -187,4 +185,10 @@ with open("kinship_model_facenet_2.json", "w") as json_file:
     json_file.write(kinship_model_json)
     
 kinship_model.save_weights("kinship_model_weights_facenet_2.h5")
+
+
+# In[ ]:
+
+
+
 
