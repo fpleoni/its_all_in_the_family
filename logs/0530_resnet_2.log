@@ -1,0 +1,90 @@
+ python3 resnet_implementation.py
+/usr/lib/python3/dist-packages/h5py/__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow/python/ops/resource_variable_ops.py:435: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Colocations handled automatically by placer.
+2019-05-30 15:54:04.879884: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-05-30 15:54:04.956821: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-05-30 15:54:04.957267: I tensorflow/compiler/xla/service/service.cc:150] XLA service 0x1350020 executing computations on platform CUDA. Devices:
+2019-05-30 15:54:04.957278: I tensorflow/compiler/xla/service/service.cc:158]   StreamExecutor device (0): GeForce GTX 1080 Ti, Compute Capability 6.1
+2019-05-30 15:54:04.974760: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 3696000000 Hz
+2019-05-30 15:54:04.975486: I tensorflow/compiler/xla/service/service.cc:150] XLA service 0x137c4a0 executing computations on platform Host. Devices:
+2019-05-30 15:54:04.975511: I tensorflow/compiler/xla/service/service.cc:158]   StreamExecutor device (0): <undefined>, <undefined>
+2019-05-30 15:54:04.975793: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1433] Found device 0 with properties: 
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.6705
+pciBusID: 0000:01:00.0
+totalMemory: 10.91GiB freeMemory: 10.22GiB
+2019-05-30 15:54:04.975829: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1512] Adding visible gpu devices: 0
+2019-05-30 15:54:04.976414: I tensorflow/core/common_runtime/gpu/gpu_device.cc:984] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-05-30 15:54:04.976422: I tensorflow/core/common_runtime/gpu/gpu_device.cc:990]      0 
+2019-05-30 15:54:04.976427: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1003] 0:   N 
+2019-05-30 15:54:04.976588: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 9940 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:01:00.0, compute capability: 6.1)
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow/python/ops/math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.cast instead.
+Epoch 1/100
+2019-05-30 15:54:23.920544: I tensorflow/stream_executor/dso_loader.cc:152] successfully opened CUDA library libcublas.so.10.0 locally
+  1/100 [..............................] - ETA: 1:09 - loss: 0.2423 - acc: 0.500  2/100 [..............................] - ETA: 38s - loss: 0.2431 - acc: 0.5000100/100 [==============================] - 9s 87ms/step - loss: 0.2415 - acc: 0.5000
+ - 76s - loss: 0.2428 - acc: 0.5015 - val_loss: 0.2415 - val_acc: 0.5000
+Epoch 2/100
+100/100 [==============================] - 8s 81ms/step - loss: 0.2409 - acc: 0.5000
+ - 67s - loss: 0.2405 - acc: 0.5000 - val_loss: 0.2409 - val_acc: 0.5000
+Epoch 3/100
+100/100 [==============================] - 8s 81ms/step - loss: 0.2402 - acc: 0.4990
+ - 67s - loss: 0.2399 - acc: 0.4995 - val_loss: 0.2402 - val_acc: 0.4990
+Epoch 4/100
+100/100 [==============================] - 8s 81ms/step - loss: 0.2402 - acc: 0.5000
+ - 67s - loss: 0.2394 - acc: 0.4990 - val_loss: 0.2402 - val_acc: 0.5000
+Epoch 5/100
+100/100 [==============================] - 8s 82ms/step - loss: 0.2400 - acc: 0.4985
+ - 67s - loss: 0.2390 - acc: 0.4980 - val_loss: 0.2400 - val_acc: 0.4985
+Epoch 6/100
+100/100 [==============================] - 8s 82ms/step - loss: 0.2401 - acc: 0.5000
+ - 67s - loss: 0.2385 - acc: 0.4978 - val_loss: 0.2401 - val_acc: 0.5000
+Epoch 7/100
+100/100 [==============================] - 8s 81ms/step - loss: 0.2389 - acc: 0.4995
+ - 67s - loss: 0.2378 - acc: 0.4990 - val_loss: 0.2389 - val_acc: 0.4995
+Epoch 8/100
+100/100 [==============================] - 8s 82ms/step - loss: 0.2389 - acc: 0.4880
+ - 68s - loss: 0.2376 - acc: 0.4963 - val_loss: 0.2389 - val_acc: 0.4880
+Epoch 9/100
+100/100 [==============================] - 8s 82ms/step - loss: 0.2397 - acc: 0.4750
+ - 67s - loss: 0.2375 - acc: 0.4775 - val_loss: 0.2397 - val_acc: 0.4750
+Epoch 10/100
+100/100 [==============================] - 8s 82ms/step - loss: 0.2391 - acc: 0.4710
+ - 67s - loss: 0.2369 - acc: 0.4683 - val_loss: 0.2391 - val_acc: 0.4710
+Epoch 11/100
+100/100 [==============================] - 8s 82ms/step - loss: 0.2389 - acc: 0.4610
+ - 68s - loss: 0.2363 - acc: 0.4627 - val_loss: 0.2389 - val_acc: 0.4610
+Epoch 12/100
+100/100 [==============================] - 8s 81ms/step - loss: 0.2383 - acc: 0.4610
+ - 67s - loss: 0.2368 - acc: 0.4625 - val_loss: 0.2383 - val_acc: 0.4610
+Epoch 13/100
+100/100 [==============================] - 8s 82ms/step - loss: 0.2387 - acc: 0.4550
+ - 67s - loss: 0.2364 - acc: 0.4665 - val_loss: 0.2387 - val_acc: 0.4550
+Epoch 14/100
+100/100 [==============================] - 8s 81ms/step - loss: 0.2384 - acc: 0.4555
+ - 67s - loss: 0.2364 - acc: 0.4660 - val_loss: 0.2384 - val_acc: 0.4555
+Epoch 15/100
+100/100 [==============================] - 8s 82ms/step - loss: 0.2385 - acc: 0.4580
+ - 67s - loss: 0.2362 - acc: 0.4642 - val_loss: 0.2385 - val_acc: 0.4580
+Epoch 16/100
+100/100 [==============================] - 8s 81ms/step - loss: 0.2390 - acc: 0.4740
+ - 67s - loss: 0.2364 - acc: 0.4680 - val_loss: 0.2390 - val_acc: 0.4740
+Epoch 17/100
+100/100 [==============================] - 8s 82ms/step - loss: 0.2384 - acc: 0.4545
+ - 67s - loss: 0.2360 - acc: 0.4660 - val_loss: 0.2384 - val_acc: 0.4545
+Epoch 18/100
+100/100 [==============================] - 8s 82ms/step - loss: 0.2379 - acc: 0.4505
+ - 67s - loss: 0.2363 - acc: 0.4640 - val_loss: 0.2379 - val_acc: 0.4505
+Epoch 19/100
+100/100 [==============================] - 8s 81ms/step - loss: 0.2380 - acc: 0.4450
+ - 67s - loss: 0.2363 - acc: 0.4563 - val_loss: 0.2380 - val_acc: 0.4450
+Epoch 20/100
+100/100 [==============================] - 8s 81ms/step - loss: 0.2385 - acc: 0.4565
+ - 67s - loss: 0.2357 - acc: 0.4605 - val_loss: 0.2385 - val_acc: 0.4565
+Epoch 21/100
+100/100 [==============================] - 8s 82ms/step - loss: 0.2387 - acc: 0.4550
+ - 67s - loss: 0.2362 - acc: 0.4633 - val_loss: 0.2387 - val_acc: 0.4550
+dict_keys(['loss', 'acc', 'val_loss', 'val_acc', 'lr'])
