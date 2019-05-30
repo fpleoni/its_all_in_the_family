@@ -21,7 +21,7 @@ from tensorflow.math import sqrt, square, reduce_sum
 from random import choice, sample
 from keras.applications.vgg16 import preprocess_input
 from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
-import model_evaluation_utils as meu
+# import model_evaluation_utils as meu
 
 
 # In[4]:
@@ -127,7 +127,7 @@ facenet_model.trainable = True
 
 set_trainable = False
 for layer in facenet_model.layers:
-    if layer.name in ["Block8_1_Branch_1_Conv2d_0a_1x1"]:
+    if layer.name in ["Mixed_7a_Branch_2_Conv2d_0a_1x1", "Block8_1_Branch_1_Conv2d_0a_1x1"]:
         set_trainable = True
     if set_trainable:
         layer.trainable = True
@@ -154,20 +154,14 @@ def siamese_model():
     x1 = model(left_image)
     x2 = model(right_image)
     
-    L2_normalized_layer_1 = layers.Lambda(lambda x: K.l2_normalize(x, axis = 1))
+     L2_normalized_layer_1 = layers.Lambda(lambda x: K.l2_normalize(x, axis = 1))
     X1_normal = L2_normalized_layer_1(x1)
     X2_normal = L2_normalized_layer_1(x2)
-    
-    X3 = Subtract()([X1_normal, X2_normal])
-    X3 = Multiply()([X3, X3])
 
-    X = Multiply()([X1_normal, X2_normal])
+    L1_layer = layers.Lambda(lambda tensors: K.abs(tensors[0] - tensors[1]))
+    L1_distance = L1_layer([X1_normal, X2_normal])
 
-    X = Concatenate(axis = -1)([X, X3])
-    
-    Dense_2 = layers.Dense(100, activation="relu")(X)
-    Dropout_1 = layers.Dropout(0.01)(Dense_2)
-    prediction = layers.Dense(1, activation = "sigmoid")(Dropout_1)
+    prediction = layers.Dense(1, activation = "sigmoid")(L1_distance)
     
     siamese_net = models.Model(inputs = [left_image, right_image], outputs = prediction)
 
