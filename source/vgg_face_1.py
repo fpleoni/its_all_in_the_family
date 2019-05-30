@@ -19,6 +19,10 @@ from tensorflow.keras import optimizers
 from tensorflow.keras import backend as K
 from random import choice, sample
 from keras.applications.vgg16 import preprocess_input
+from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
 
 
 # In[2]:
@@ -194,22 +198,89 @@ def siamese_model():
     
     return siamese_net
 
+early_stop = EarlyStopping(monitor = "val_acc", mode = "max", patience = 20)
 
+model_checkpoint = ModelCheckpoint("best_kinship_vgg_model_2.h5", monitor = "val_acc", 
+                                             mode = "max", save_best_only = True)
+
+reduce_lr_on_plateau = ReduceLROnPlateau(monitor = "val_acc", mode = "max", patience = 10, factor = 0.1)
 # In[6]:
 
 
 kinship_model = siamese_model()
-kinship_model.fit_generator(gen(train, train_person_to_images_map, batch_size = 100),
-                    validation_data = gen(val, val_person_to_images_map, batch_size = 100), epochs = 20, verbose = 2,
-                steps_per_epoch = 200, validation_steps = 100)                         
+history = kinship_model.fit_generator(gen(train, train_person_to_images_map, batch_size = 20),
+                    validation_data = gen(val, val_person_to_images_map, batch_size = 20), epochs = 200, verbose = 2,
+                steps_per_epoch = 200, validation_steps = 100, callbacks = [early_stop, model_checkpoint, reduce_lr_on_plateau])                         
 
 
 # In[ ]:
 
 
 kinship_model_json = kinship_model.to_json()
-with open("kinship_model_vgg.json", "w") as json_file:
+with open("kinship_model_vgg_2.json", "w") as json_file:
     json_file.write(kinship_model_json)
     
-kinship_model.save_weights("kinship_model_weights_vgg.h5")
+kinship_model.save_weights("kinship_model_weights_vgg_2.h5")
+
+# list all data in history
+print(history.history.keys())
+# summarize history for accuracy
+plt.plot(history.history["acc"], color = "aquamarine")
+plt.plot(history.history["val_acc"], color = "magenta")
+plt.title("Model accuracy")
+plt.ylabel("accuracy")
+plt.xlabel("epoch")
+plt.legend(["train", "validation"], loc = "upper left")
+plt.show()
+plt.savefig("vgg_acc.png")
+# summarize history for loss
+plt.plot(history.history["loss"], "aquamarine")
+plt.plot(history.history["val_loss"], color = "magenta")
+plt.title("Model loss")
+plt.ylabel("loss")
+plt.xlabel("epoch")
+plt.legend(["train", "validation"], loc = "upper left")
+plt.show()
+plt.savefig("vgg_loss.png")
+
+test_path = "../data/test/"
+
+#return a set of inputerd size as generator
+def gen_2(test_set, size=32):
+    return (test_set[i:i + size] for i in range(0, len(test_set), size))
+
+submission_df = pd.read_csv("../csv_files/sample_submission.csv")
+
+predictions = []
+
+
+for batch in gen_2(submission_df.img_pair.values):
+#     print(batch)
+    img_1 = []
+    img_2 = []
+    #seperate image paths
+    for pair_img in batch:
+        pairs = pair_img.split('-')
+        img_1.append(pairs[0])
+        img_2.append(pairs[1])
+    
+    pic_1 = []
+    pic_2 = []
+    #read the image names
+    for imge_1, imge_2 in zip(img_1, img_2):
+        pic_1.append(read_img(test_path + imge_1))
+        pic_2.append(read_img(test_path + imge_2))
+    
+    pic_1 = np.array(pic_1)
+    pic_2 = np.array(pic_2)
+#     print(pic_1)
+#     print(pic_2)
+    
+    #predict using the test image arrays 
+    pred = kinship_model.predict([pic_1, pic_2]).ravel().tolist()
+    #combine list
+    predictions += pred
+    
+submission_df["predicted_relationship"] = predictions
+submission_df.to_csv("vgg_predictions.csv", index = False)
 
