@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[15]:
 
 
 # Import libraries
@@ -17,13 +17,14 @@ from tensorflow.keras import models
 from tensorflow.keras import optimizers
 from tensorflow.keras import backend as K
 from tensorflow.keras import regularizers
-from tensorflow.math import sqrt, square, reduce_sum, sigmoid
+from tensorflow.math import sqrt, square, reduce_sum
 from random import choice, sample
 from keras.applications.vgg16 import preprocess_input
-from keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+import model_evaluation_utils as meu
 
 
-# In[2]:
+# In[4]:
 
 
 # File paths
@@ -32,7 +33,7 @@ train_relationships_path = "../csv_files/train_relationships.csv"
 validation_path = "F09"
 
 
-# In[3]:
+# In[5]:
 
 
 # Functions by Youness Mansar https://github.com/CVxTz/kinship_prediction
@@ -94,7 +95,7 @@ def gen(list_tuples, person_to_images_map, batch_size=16):
         yield [X1, X2], labels
 
 
-# In[4]:
+# In[6]:
 
 
 def euclidean_distance(embedding_1, embedding_2):
@@ -104,7 +105,7 @@ def euclidean_distance(embedding_1, embedding_2):
     return euclidean_distance
 
 
-# In[ ]:
+# In[7]:
 
 
 def contrastive_loss(y_true, y_pred):
@@ -115,12 +116,27 @@ def contrastive_loss(y_true, y_pred):
     return K.mean(y_true * K.square(y_pred) + (1 - y_pred) * K.square(K.maximum(margin - y_pred, 0)))
 
 
-# In[5]:
+# In[17]:
 
 
 # Import FaceNet model and FaceNet weights
 facenet_model = models.load_model("../facenet/facenet_keras.h5")
 facenet_model.load_weights("../facenet/facenet_keras_weights.h5")
+ 
+facenet_model.trainable = True
+
+set_trainable = False
+for layer in facenet_model.layers:
+    if layer.name in ["Block8_1_Branch_1_Conv2d_0a_1x1"]:
+        set_trainable = True
+    if set_trainable:
+        layer.trainable = True
+    else:
+        layer.trainable = False
+
+# layers = [(layer, layer.name, layer.trainable) for layer in facenet_model.layers]
+# pd.set_option("display.max_rows", 500)
+# pd.DataFrame(layers, columns=["Layer Type", "Layer Name", "Layer Trainable"]) 
 
 
 # In[6]:
@@ -142,9 +158,16 @@ def siamese_model():
     X1_normal = L2_normalized_layer_1(x1)
     X2_normal = L2_normalized_layer_1(x2)
     
-    Eu_distance = tf.convert_to_tensor(euclidean_distance(X1_normal, X2_normal))
+    X3 = Subtract()([X1_normal, X2_normal])
+    X3 = Multiply()([X3, X3])
+
+    X = Multiply()([X1_normal, X2_normal])
+
+    X = Concatenate(axis = -1)([X, X3])
     
-    prediction = layers.Lambda(sigmoid(Eu_distance))
+    Dense_2 = layers.Dense(100, activation="relu")(X)
+    Dropout_1 = layers.Dropout(0.01)(Dense_2)
+    prediction = layers.Dense(1, activation = "sigmoid")(Dropout_1)
     
     siamese_net = models.Model(inputs = [left_image, right_image], outputs = prediction)
 
@@ -156,25 +179,22 @@ def siamese_model():
 # In[9]:
 
 
-tensorboard = TensorBoard(log_dir = "./logs_facenet", batch_size = 100, write_images = True,
-                                   write_grads = True, write_graph = False)
-
 early_stop = EarlyStopping(monitor = "val_acc", mode = "max", patience = 20)
 
-model_checkpoint = ModelCheckpoint("best_kinship_model_2.h5", monitor = "val_acc", 
+model_checkpoint = ModelCheckpoint("best_kinship_facenet_model_2.h5", monitor = "val_acc", 
                                              mode = "max", save_best_only = True)
 
 reduce_lr_on_plateau = ReduceLROnPlateau(monitor = "val_acc", mode = "max", patience = 10, factor = 0.1)
 
 
-# In[10]:
+# In[18]:
 
 
 kinship_model = siamese_model()
 kinship_model.fit_generator(gen(train, train_person_to_images_map, batch_size = 100),
                     validation_data = gen(val, val_person_to_images_map, batch_size = 100), epochs = 200, verbose = 2,
                 steps_per_epoch = 200, validation_steps = 100, 
-                            callbacks = [tensorboard, early_stop, model_checkpoint, reduce_lr_on_plateau])
+                            callbacks = [early_stop, model_checkpoint, reduce_lr_on_plateau])
 
 
 # In[ ]:
