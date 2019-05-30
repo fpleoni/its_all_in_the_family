@@ -53,9 +53,8 @@ Based on a research paper called "(Insert research paper name)"(insert research 
 ## Further Steps
 - As we had many models, with many layers, hyperparameter tuning is an area that could be greatly improved. 
 - Many of the research papers that were studied before attempting this project first used a method of sectioning the images of the face into multiple sections before sending them through the network i.e. top right, top left, bottom right, bottom left. A way to improve the models would be to perform this action beforehand.
+- Many of the family members did not have many images of themselves. As such, they had a lower chance of getting selected to be trained upon and if they were selected, there is a lack of varying faces which poses issues with the network because it cannot generalise as well. A further step would be to gather more images of the people present within the dataset or to create augmentations of the current images.
 
-
-These sections are then used in a similar fashion as the 
 
 
 
