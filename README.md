@@ -44,7 +44,7 @@ A deeper, more complex model was desired to see if the model would be able to le
 Based on a research paper called "(Insert research paper name)"(insert research paper link), FaceNet is used because of its high performance.
 
 (```Insert Hyperparameters Used```) <br>
-<img src="source/images_acc_loss/facenet_2_loss.png" height=300> <img src="source/images_acc_loss/facenet_2_acc.png" height=300> <br>
+<img src="source/images_acc_loss/facenet_loss.png" height=300> <img src="source/images_acc_loss/facenet_acc.png" height=300> <br>
 (--> slight observation comment <--)<br>
 
 ## Further Steps
