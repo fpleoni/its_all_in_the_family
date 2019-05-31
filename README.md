@@ -17,7 +17,7 @@ The basic idea of Siamese CNNs is inputting two images on seperate CNNs which ha
 
 Siamese CNNs is still a field that is relatively new. There are no publicly available pretrained Siamese CNNs. As such we borrow the methods used in research papers about this same topic and rely on transfer learning to compensate for our lack of images for each class. 
 
-### Baseline 
+### Baseline - Koch et al. (Untrained)
 (--> if you have a baseline architecture you can put <--)<br>
 (```Insert Hyperparameters Used```) <br>
 <img src="source/images_acc_loss/koch_loss.png" height=300> <img src="source/images_acc_loss/koch_acc.png" height=300> <br>
@@ -52,12 +52,6 @@ Based on a research paper called "(Insert research paper name)"(insert research 
 - Many of the research papers that were studied before attempting this project first used a method of sectioning the images of the face into multiple sections before sending them through the network i.e. top right, top left, bottom right, bottom left. A way to improve the models would be to perform this action beforehand.
 - Many of the family members did not have many images of themselves. As such, they had a lower chance of getting selected to be trained upon and if they were selected, there is a lack of varying faces which poses issues with the network because it cannot generalise as well. A further step would be to gather more images of the people present within the dataset or to create augmentations of the current images.
 
-
-
-
-VGGFace - (around 50% accuracy)
-ResNet50 - (around 50% accuracy)
-FaceNet - (performed the best; around 7% better compared to other 2 -> 57%) 
 
 
 
