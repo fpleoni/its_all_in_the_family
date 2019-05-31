@@ -28,6 +28,7 @@ Three different pretrained models were used to assisst in modelling
 
 ### VGGFace
 VGGFace was chosen because it offered a simple but deep architecture. An advantage to this model was its simplicity and that it avoided the vanishing gradient problem because of its lower number of layers.
+(The Loss graph on the left has a training and validation loss of around 25. The other line indicates the accuracy)
 
 (```Insert Hyperparameters Used```) <br>
 <img src="source/images_acc_loss/vgg_loss.png" height=300> <img src="source/images_acc_loss/vgg_acc.png" height=300> <br>
@@ -35,6 +36,7 @@ VGGFace was chosen because it offered a simple but deep architecture. An advanta
 
 ### ResNet50
 A deeper, more complex model was desired to see if the model would be able to learn and differentiate more specific features such as the inside of the eyes or the curves in a person's philtrum. Thinking that a network can decide whether or not a facial feature is important through residual blocks, ResNet50 was chosen.
+(The Loss graph on the left has a training and validation loss of around 25. The other line indicates the accuracy)
 
 (```Insert Hyperparameters Used```) <br>
 <img src="source/images_acc_loss/resnet_loss.png" height=300> <img src="source/images_acc_loss/resnet_acc.png" height=300> <br>
