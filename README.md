@@ -20,7 +20,7 @@ Siamese CNNs is still a field that is relatively new. There are no publicly avai
 ### Baseline 
 (--> if you have a baseline architecture you can put <--)<br>
 (```Insert Hyperparameters Used```) <br>
-(*train/validation loss graph*) (*train/validation accuracy graph*)<br>
+<img src="source/images_acc_loss/koch_loss.png" height=325> <img src="source/images_acc_loss/koch_acc.png" height=325> <br>
 (--> slight observation comment <--)<br>
 
 ## Pretrained Models
@@ -30,21 +30,21 @@ Three different pretrained models were used to assisst in modelling
 VGGFace was chosen because it offered a simple but deep architecture. An advantage to this model was its simplicity and that it avoided the vanishing gradient problem because of its lower number of layers.
 
 (```Insert Hyperparameters Used```) <br>
-(*train/validation loss graph*) (*train/validation accuracy graph*)<br>
+<img src="source/images_acc_loss/vgg_loss.png" height=325> <img src="source/images_acc_loss/vgg_acc.png" height=325> <br>
 (--> slight observation comment <--)<br>
 
 ### ResNet50
 A deeper, more complex model was desired to see if the model would be able to learn and differentiate more specific features such as the inside of the eyes or the curves in a person's philtrum. Thinking that a network can decide whether or not a facial feature is important through residual blocks, ResNet50 was chosen.
 
 (```Insert Hyperparameters Used```) <br>
-(*train/validation loss graph*) (*train/validation accuracy graph*)<br>
+<img src="source/images_acc_loss/resnet_loss.png" height=325> <img src="source/images_acc_loss/resnet_acc.png" height=325> <br>
 (--> slight observation comment <--)<br>
 
 ### FaceNet
 Based on a research paper called "(Insert research paper name)"(insert research paper link), FaceNet is used because of its high performance.
 
 (```Insert Hyperparameters Used```) <br>
-(*train/validation loss graph*) (*train/validation accuracy graph*)<br>
+<img src="source/images_acc_loss/facenet_2_loss.png" height=325> <img src="source/images_acc_loss/facenet_2_acc.png" height=325> <br>
 (--> slight observation comment <--)<br>
 
 ## Further Steps
