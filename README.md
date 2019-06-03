@@ -18,36 +18,77 @@ The basic idea of Siamese CNNs is inputting two images on seperate CNNs which ha
 Siamese CNNs is still a field that is relatively new. There are no publicly available pretrained Siamese CNNs. As such we borrow the methods used in research papers about this same topic and rely on transfer learning to compensate for our lack of images for each class. 
 
 ### Baseline - Koch et al. (Untrained)
-(--> if you have a baseline architecture you can put <--)<br>
-(```Insert Hyperparameters Used```) <br>
+
+# Architecture
+  - Conv2D - ReLu
+  - MaxPooling2D
+  - Conv2D - ReLu
+  - MaxPooling2D
+  - Conv2D - ReLu
+  - MaxPooling2D
+  - Conv2D - ReLu
+  - Flatten
+  - Dense - Sigmoid
+
 <img src="source/images_acc_loss/koch_loss.png" height=300> <img src="source/images_acc_loss/koch_acc.png" height=300> <br>
-(--> slight observation comment <--)<br>
+
+
+As we can see, model accuracy starts stable, and the spirals down as epochs increase, while the loss orbitates around the same value.
 
 ## Pretrained Models
 Three different pretrained models were used to assisst in modelling
 
 ### VGGFace
 VGGFace was chosen because it offered a simple but deep architecture. An advantage to this model was its simplicity and that it avoided the vanishing gradient problem because of its lower number of layers.
+
+# Architecture:
+  - ZeroPadding2D
+  - Conv2D - ReLu
+  - MaxPooling2D
+  - Dropout - 0.5
+  - Flatten
+  - Activation - Softmax
+  - Dense - ReLu
+  - Dense - Sigmoid
+
 (The Loss graph on the left has a training and validation loss of around 25. The other line indicates the accuracy)
 
-(```Insert Hyperparameters Used```) <br>
 <img src="source/images_acc_loss/vgg_loss.png" height=300> <img src="source/images_acc_loss/vgg_acc.png" height=300> <br>
-(--> slight observation comment <--)<br>
+
+Accuracy dips in the first few epochs, and then stabilizes a little below 0.50.
 
 ### ResNet50
 A deeper, more complex model was desired to see if the model would be able to learn and differentiate more specific features such as the inside of the eyes or the curves in a person's philtrum. Thinking that a network can decide whether or not a facial feature is important through residual blocks, ResNet50 was chosen.
+
+# Architecture:
+  - Conv2D - ReLu
+  - AveragePooling2D
+  - Activation - Softmax
+  - Dense - Sigmoid
+
 (The Loss graph on the left has a training and validation loss of around 25. The other line indicates the accuracy)
 
-(```Insert Hyperparameters Used```) <br>
 <img src="source/images_acc_loss/resnet_loss.png" height=300> <img src="source/images_acc_loss/resnet_acc.png" height=300> <br>
-(--> slight observation comment <--)<br>
 
 ### FaceNet
-Based on a research paper called "(Insert research paper name)"(insert research paper link), FaceNet is used because of its high performance.
+Based on a research paper called **"FaceNet: A Unified Embedding for Face Recognition and Clustering"** https://arxiv.org/pdf/1503.03832.pdf, FaceNet is used because of its high performance.
 
-(```Insert Hyperparameters Used```) <br>
+# Architecture:
+  - Conv2D - ReLu
+  - MaxPooling2D
+  - Batch Normalization
+  - ScaleSum
+  - Concatenate
+  - Activation - Softmax
+  - Global Average Pooling 2D
+  - Dropout - 0.5
+  - Dense - Sigmoid
+  - Bottleneck
+  - Batch Normalization
+  - Dense - ReLu
+  - Dense - Sigmoid
+
 <img src="source/images_acc_loss/facenet_loss.png" height=300> <img src="source/images_acc_loss/facenet_acc.png" height=300> <br>
-(--> slight observation comment <--)<br>
 
 ## Further Steps
 - As we had many models, with many layers, hyperparameter tuning is an area that could be greatly improved. 
