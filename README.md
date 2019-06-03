@@ -1,6 +1,6 @@
 # its_all_in_the_family
 
-## Motivaiton
+## Motivation
 Identifying images through a picture is a very interesting topic. It becomes even more interesting by going one step further and differentiating between images. This project focuses on identifying unique features in images of faces and classfying these images as being blood related or not. This idea brings forth much real world implications and neural network theory advancements.
 
 ## Faces Dataset
