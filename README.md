@@ -19,7 +19,7 @@ Siamese CNNs is still a field that is relatively new. There are no publicly avai
 
 ### Baseline - Koch et al. (Untrained)
 
-# Architecture
+#### Architecture
   - Conv2D - ReLu
   - MaxPooling2D
   - Conv2D - ReLu
@@ -41,7 +41,7 @@ Three different pretrained models were used to assisst in modelling
 ### VGGFace
 VGGFace was chosen because it offered a simple but deep architecture. An advantage to this model was its simplicity and that it avoided the vanishing gradient problem because of its lower number of layers.
 
-# Architecture:
+#### Architecture:
   - ZeroPadding2D
   - Conv2D - ReLu
   - MaxPooling2D
@@ -60,7 +60,7 @@ Accuracy dips in the first few epochs, and then stabilizes a little below 0.50.
 ### ResNet50
 A deeper, more complex model was desired to see if the model would be able to learn and differentiate more specific features such as the inside of the eyes or the curves in a person's philtrum. Thinking that a network can decide whether or not a facial feature is important through residual blocks, ResNet50 was chosen.
 
-# Architecture:
+#### Architecture:
   - Conv2D - ReLu
   - AveragePooling2D
   - Activation - Softmax
@@ -73,7 +73,7 @@ A deeper, more complex model was desired to see if the model would be able to le
 ### FaceNet
 Based on a research paper called **"FaceNet: A Unified Embedding for Face Recognition and Clustering"** https://arxiv.org/pdf/1503.03832.pdf, FaceNet is used because of its high performance.
 
-# Architecture:
+#### Architecture:
   - Conv2D - ReLu
   - MaxPooling2D
   - Batch Normalization
@@ -89,6 +89,8 @@ Based on a research paper called **"FaceNet: A Unified Embedding for Face Recogn
   - Dense - Sigmoid
 
 <img src="source/images_acc_loss/facenet_loss.png" height=300> <img src="source/images_acc_loss/facenet_acc.png" height=300> <br>
+
+FaceNet offered the highest accuracy out of all the neural network architectures tried. 
 
 ## Further Steps
 - As we had many models, with many layers, hyperparameter tuning is an area that could be greatly improved. 
